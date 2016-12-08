@@ -3,16 +3,25 @@ services:
   dockuper:
     build:
       context: ./
+      args:
+        S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
+        S3_FOLDER: "${S3_FOLDER}"
+        AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+        AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+        AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
+        PATHS_TO_BACKUP: "${PATHS_TO_BACKUP}"
+        BACKUP_NAME: "${BACKUP_NAME}"
+        RESTORE: "${RESTORE}"
       dockerfile: ./source/dockup/Dockerfile
     image: dockuper:latest
     environment:
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-      - BACKUP_NAME=${BACKUP_NAME}
-      - PATHS_TO_BACKUP=${PATHS_TO_BACKUP} #через пробел
-      - S3_FOLDER=${S3_FOLDER}
-      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
-      - RESTORE=${RESTORE}
+      - "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+      - "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+      - "AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}"
+      - "BACKUP_NAME=${BACKUP_NAME}"
+      - "PATHS_TO_BACKUP=${PATHS_TO_BACKUP}"
+      - "S3_FOLDER=${S3_FOLDER}"
+      - "S3_BUCKET_NAME=${S3_BUCKET_NAME}"
+      - "RESTORE=${RESTORE}"
     volumes_from:
-      - container:${CONTAINER_VOLUMES_BACKUP}
+      - "container:${CONTAINER_VOLUMES_BACKUP}"
