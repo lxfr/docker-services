@@ -1,0 +1,18 @@
+version: '2'
+services:
+  dockuper:
+    build:
+      context: ./
+      dockerfile: ./source/dockup/Dockerfile
+    image: dockuper:latest
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - BACKUP_NAME=${BACKUP_NAME}
+      - PATHS_TO_BACKUP=${PATHS_TO_BACKUP} #через пробел
+      - S3_FOLDER=${S3_FOLDER}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+      - RESTORE=${RESTORE}
+    volumes_from:
+      - container:${CONTAINER_VOLUMES_BACKUP}

@@ -1,0 +1,61 @@
+version: '2'
+services:  
+  dockerUI:
+    build:
+      context: ./
+      dockerfile: ./source/dockerUI/Dockerfile
+    image: dockerui:latest
+    ports:
+      - 9009:9000
+    volumes:
+    - /var/run/docker.sock:/docker.sock
+    command: "-e=/docker.sock"
+    entrypoint: "./dockerui"
+  dockerRemoteAPI:
+    build:
+      context: ./
+      dockerfile: ./source/dockerRemoteAPI/Dockerfile
+    image: dockerremoteapi:latest
+    ports:
+      - 2375:2375
+    expose:
+      - 2375
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock    
+  composeUI:
+    build:
+      context: ./
+      dockerfile: ./source/composeUI/Dockerfile
+    image: composeui:latest
+    volumes:
+    - /var/run/docker.sock:/docker.sock
+    - ${PROJECTS_PATH}:/opt/docker-compose-projects:ro
+    ports:
+      - 5000:5000        
+    links:
+      - dockerRemoteAPI
+    depends_on:
+      - dockerRemoteAPI
+    command: "-e=/docker.sock"
+    entrypoint: ["/env/bin/python","/app/main.py"]
+    environment:
+      - DOCKER_HOST=${DOCKER_API}
+  scope:
+    network_mode: "host"
+    pid: "host"
+    privileged: true
+    labels:
+      - "works.weave.role=system"
+    build:
+      context: ./
+      dockerfile: ./source/scope/Dockerfile
+    image: scope:latest
+    ports:
+      - 4040:4040
+    environment:
+      - DOCKER_SOCK_FILE=/var/run/docker.sock
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:rw"
+    command:
+      - "--probe.docker"
+      - "true"

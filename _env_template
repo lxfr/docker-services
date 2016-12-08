@@ -1,0 +1,11 @@
+PROJECTS_PATH=/home/user/servers
+DOCKER_API=http://172.17.0.1:2375
+AWS_ACCESS_KEY_ID=_______
+AWS_SECRET_ACCESS_KEY=_______
+AWS_DEFAULT_REGION=eu-central-1
+BACKUP_NAME=yupe
+PATHS_TO_BACKUP=/var/lib/mysql
+S3_BUCKET_NAME=_______
+S3_FOLDER=yupe
+CONTAINER_VOLUMES_BACKUP=yupedocker_db_1
+RESTORE=true

@@ -1,0 +1,1 @@
+FROM weaveworks/scope:latest
